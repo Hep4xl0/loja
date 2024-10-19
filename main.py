@@ -85,7 +85,7 @@ def adicionar_funcionario():
         salario=dados['salario'],
         data_contratacao=dados['data_contratacao'],
         loja_trabalho_id=dados['loja_trabalho_id'],
-        loja_trabalho=dados['loja_trabalho']  # Não se esqueça de adicionar esta linha
+        loja_trabalho=dados['loja_trabalho'] 
     )
     
     db.session.add(novo_funcionario)
@@ -106,7 +106,7 @@ def adicionar_produto():
         produtos_custo=dados['produtos_custo'],
         vendas=dados['vendas'],
         loja_id=dados['loja_id'],
-        loja=dados['loja']  # Não se esqueça de adicionar esta linha
+        loja=dados['loja'] 
     )
     
     db.session.add(novo_produto)
@@ -114,3 +114,29 @@ def adicionar_produto():
     
     return jsonify({'message': 'Produto adicionado', 'id': novo_produto.id}), 201
 
+@app.route('/lojas/<int:id>', methods=['DELETE'])
+def remover_loja(id):
+    loja = Loja.query.get(id)
+    if not loja:
+        return jsonify({'message': 'Loja não encontrada'}), 404
+    db.session.delete(loja)
+    db.session.commit()
+    return jsonify({'message': 'Loja removida'}), 200
+
+@app.route('/funcionarios/<int:id>', methods=['DELETE'])
+def remover_funcionario(id):
+    funcionario = Funcionarios.query.get(id)
+    if not funcionario:
+        return jsonify({'message': 'Funcionário não encontrado'}), 404
+    db.session.delete(funcionario)
+    db.session.commit()
+    return jsonify({'message': 'Funcionário removido'}), 200
+
+@app.route('/produtos/<int:id>', methods=['DELETE'])
+def remover_produto(id):
+    produto = Produtos.query.get(id)
+    if not produto:
+        return jsonify({'message': 'Produto não encontrado'}), 404
+    db.session.delete(produto)
+    db.session.commit()
+    return jsonify({'message': 'Produto removido'}), 200
